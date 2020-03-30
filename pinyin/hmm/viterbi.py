@@ -3,6 +3,7 @@
     viterbi算法实现
 """
 from pinyin.model import Emission, Transition
+import sys
 
 
 def viterbi(pinyin_list):
@@ -36,10 +37,18 @@ def viterbi(pinyin_list):
 
 
 if __name__ == '__main__':
-    while 1:
-        string = raw_input('input:')
-        pinyin_list = string.split()
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+    input_file_name = 'input.txt'
+    output_file_name = 'output.txt'
+    input_file = open(input_file_name, 'r')
+    output_file = open(output_file_name, 'w')
+    one_line = input_file.readline()
+    while one_line != '':
+        pinyin_list = one_line.split()
         V = viterbi(pinyin_list)
-
-        for phrase, prob in sorted(V.items(), key=lambda d: d[1], reverse=True):
-            print phrase, prob
+        phrase, prob = sorted(V.items(), key=lambda d: d[1], reverse=True)[0]
+        output_file.write(phrase + '\n')
+        one_line = input_file.readline()
+    input_file.close()
+    output_file.close()
